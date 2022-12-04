@@ -12,4 +12,4 @@ A single RPG game with a plot.
 ## Interface
 DEMO interface:
 
-![An image is missing?](images/im.jpeg "This is how it looks on your computer!")
+![An image is missing?](Изображения/im.jpeg "This is how it looks on your computer!")
