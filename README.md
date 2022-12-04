@@ -10,6 +10,6 @@ A single RPG game with a plot.
 - os.
 
 ## Interface
-DEMO code editor interface:
+DEMO interface:
 
-![An image is missing?](images/interface_1.jpg "This is how it looks on your computer!")
+![An image is missing?](images/im.jpeg "This is how it looks on your computer!")
