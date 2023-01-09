@@ -1,13 +1,14 @@
 import pygame
-from player2 import Player
-from mobs import Mob
-from support import Support, Camera
+
+from player import Player
+from support import Support, Camera, Plot
 from map import MapSupport
 
 
-WINDOW_SIZE = (1000, 600)
-FPS = 1000
+WINDOW_SIZE = (1300, 700)
+FPS = 100
 RED = (255, 0, 0)
+
 
 def main(size) -> None:
     pygame.init()
@@ -23,17 +24,17 @@ def main(size) -> None:
     
     all_sprites = pygame.sprite.Group()
 
-    visible_group = pygame.sprite.Group()
     top = pygame.sprite.Group()
 
     players = pygame.sprite.Group()
-    creatures = pygame.sprite.Group()
 
-    player = Player("idle_1.png", visible_group, all_sprites, players)
-
-    map = MapSupport(top, visible_group, all_sprites)
-    # monk = Mob("monk", "idle_1.png", all_sprites, creatures)
+    player = Player((200, 155),screen, "idle_1.png", all_sprites, players)
+    plot = Plot()
+    map = MapSupport(top, all_sprites)
+    
     map.generate_level(map.load_level("map.txt"))
+    # npc
+    map.generate_npc(map.load_level("map_npc.txt"))
     # top
     map.generate_level(map.load_level("map_top.txt"))
     running = True
@@ -46,11 +47,9 @@ def main(size) -> None:
                 exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 player.atk("atk")
-                # monk.atk("atk")
             keys = pygame.key.get_pressed()
             if keys[pygame.K_r]:
                 player.atk("sp_atk")
-                # monk.atk("sp_atk")
             if keys[pygame.K_p]:
                 sp.pause(screen)
 
@@ -58,21 +57,21 @@ def main(size) -> None:
         # camera
         camera.update(player, size) 
         for sprite in all_sprites:
-            camera.apply(sprite, visible_group, all_sprites)
+            camera.apply(sprite)
         for sprite in top:
-            camera.apply(sprite, top, top)
+            camera.apply(sprite)
         # map
-        visible_group.draw(screen)
-        visible_group.update()
-        # creatures
-        creatures.draw(screen)
-        creatures.update()
+        all_sprites.draw(screen)
+        all_sprites.update()
         # PLAYER
         players.draw(screen)
-        players.update()
+        players.update(top)
         # top
         top.draw(screen)
-        top.update()
+        top.update(plot, player)
+
+        elem = pygame.image.load("icons//gui.png")
+        screen.blit(elem, (0, 0))
         
         clock.tick(FPS)
         pygame.display.flip()
