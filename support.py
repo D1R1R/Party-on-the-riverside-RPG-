@@ -8,8 +8,11 @@ class Support():
         self._animations = {"run": [], "runback": [], "idle": [],
                  "atk": [], "sp_atk": [],"take_hit": [], "death": [], "defend": [],}
         self._frame_index = 0
-        self._animatoin_speed = 0.1
+        self._animatoin_speed = 0.2
         self._past = "idle"
+
+    def get_my_text(self) -> str:
+        pass
 
     def load_image(self, path: str, folder: str, name: str) -> None:
         fullname = os.path.join(path, folder, name)
@@ -25,11 +28,14 @@ class Support():
         if self._past != status:
             self._frame_index = 0
         frames = self._animations[status]
-        self._frame_index += self._animatoin_speed
+        if self._frame_index != -1:
+            self._frame_index += self._animatoin_speed
         if len(frames) <= self._frame_index:
             self._frame_index = 0
-            if status == "defend" or status == "atk" or status == "sp_atk":
+            if status == "defend" or status == "atk" or status == "sp_atk" or status == "take_hit":
                 status = "idle"
+            if status == "death":
+                self._frame_index = -1
         self._past = status
         return (frames[int(self._frame_index)], status)
 
@@ -102,22 +108,39 @@ class Support():
                     game = False
 
 
+
+class Plot():
+    def __init__(self):
+        self._curent_act = 1
+        self._curent_point = 1
+        self._max_in_act = 20
+
+    def get_point(self, name: str):
+        with open(f'plot//{self._curent_act}//{self._curent_point}//{name}.txt', 'r') as file:
+            lines = file.readlines()
+            lines = [x.rstrip() for x in lines]
+            text, pos, ispointlast = lines
+        if ispointlast == "1":
+            self.next_point()
+        return text, pos
+
+    def next_point(self):
+        self._curent_point += 1
+        print(self._curent_point)
+        if self._max_in_act < self._curent_point:
+            self._curent_point = 1
+            self._curent_act += 1    
+
+
+
 class Camera:
     def __init__(self):
         self.dx = 0
         self.dy = 0
         
-    def apply(self, obj, visible_group, all_g):
-        width, height = pygame.display.get_window_size()
-        tile_size = 50
+    def apply(self, obj):
         obj.rect.x += self.dx
         obj.rect.y += self.dy
-        if (obj.rect.x < (0 - tile_size) or obj.rect.y < (0 - tile_size)
-        or obj.rect.x > width or obj.rect.y > height):
-            obj.kill()
-            all_g.add(obj)
-        else:
-            visible_group.add(obj)
 
     def update(self, target, size):
         width, height = size
