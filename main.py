@@ -6,7 +6,7 @@ from map import MapSupport
 
 
 WINDOW_SIZE = (1300, 700)
-FPS = 100
+FPS = 60
 RED = (255, 0, 0)
 
 
