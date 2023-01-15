@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(pos)
         # for animation
         self._status = "idle"
-        for animation_name in ["run", "runback", "idle", "sp_atk", "take_hit", "atk", "death", "defend",]:
+        for animation_name in ["run", "runback", "idle", "take_hit", "atk", "death", "defend",]:
             self._sp.import_animation('player_animations//leaf', animation_name)
         # specifications
         self._act = False
@@ -30,9 +30,7 @@ class Player(pygame.sprite.Sprite):
             "you died, now you have to start over"
         ]
 
-    def player_move(self, top_group) -> None:
-        old_rect = self.rect
-
+    def player_move(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self._status = "atk"
@@ -60,17 +58,13 @@ class Player(pygame.sprite.Sprite):
         
         if (not keys[pygame.K_w] and not keys[pygame.K_d]
             and not keys[pygame.K_s] and not keys[pygame.K_a]
-            and self._status != "defend" and self._status != "atk"
-            and self._status != "sp_atk"):
+            and self._status != "defend" and self._status != "atk"):
             self._status = "idle"
-
-        if pygame.sprite.spritecollideany(self, top_group):
-            self.rect = old_rect
 
     def atk(self, atk_type: str) -> None:
         self._status = atk_type
 
-    def hp_line(self):
+    def hp_line(self, screen):
         if self._hp <= 0:
             self._status = "death"
 
@@ -115,13 +109,16 @@ class Player(pygame.sprite.Sprite):
                     self._status = "idle"
                     game = False
 
-    def update(self, top_group=False) -> None:
-        if top_group:
+    def update(self, sc=False, boxes_group=False) -> None:
+        if boxes_group:
+            old_rect_x, old_rect_y = self.rect.x, self.rect.y
             self.image, self._status = self._sp.choose_frame(self._status) 
-            self.hp_line()
+            self.hp_line(sc)
             if self._status != "death":
                 if self._status != "take_hit":
-                    self.player_move(top_group)
+                    self.player_move()
+                    if pygame.sprite.spritecollideany(self, boxes_group):
+                        self.rect.x, self.rect.y = old_rect_x, old_rect_y
             else:
                 if self._sp._frame_index == -1:
                     self.game_over(self._sc)
