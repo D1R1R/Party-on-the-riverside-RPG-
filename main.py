@@ -25,12 +25,12 @@ def main(size) -> None:
     all_sprites = pygame.sprite.Group()
 
     top = pygame.sprite.Group()
+    wall = pygame.sprite.Group()
 
     players = pygame.sprite.Group()
 
     player = Player((200, 155),screen, "idle_1.png", all_sprites, players)
-    plot = Plot()
-    map = MapSupport(top, all_sprites)
+    map = MapSupport(wall, top, all_sprites)
     
     map.generate_level(map.load_level("map.txt"))
     # npc
@@ -39,6 +39,8 @@ def main(size) -> None:
     map.generate_level(map.load_level("map_top.txt"))
     running = True
     sp.game(screen)
+    sp.reg(screen)
+    plot = Plot()
     while running:
         # events
         for event in pygame.event.get():
@@ -65,13 +67,17 @@ def main(size) -> None:
         all_sprites.update()
         # PLAYER
         players.draw(screen)
-        players.update(top)
+        players.update(screen, wall)
         # top
         top.draw(screen)
         top.update(plot, player)
 
         elem = pygame.image.load("icons//gui.png")
         screen.blit(elem, (0, 0))
+        font = pygame.font.SysFont('ArialBold', 55)
+        text_surface = font.render(str(player._hp), False, (212, 175, 55))
+        screen.blit(text_surface,
+                (175, 55))
         
         clock.tick(FPS)
         pygame.display.flip()
