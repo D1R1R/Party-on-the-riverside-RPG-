@@ -19,7 +19,7 @@ class Aggressive_Mob(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         # for animation
         self._status = "idle"
-        for animation_name in ["run", "runback", "idle", "sp_atk", "take_hit", "atk", "death", "defend",]:
+        for animation_name in ["run", "runback", "idle", "take_hit", "atk", "death",]:
             self._sp.import_animation(path, animation_name)
         # specifications
         self._hp = 100
@@ -133,8 +133,6 @@ class Speaking_Mob(pygame.sprite.Sprite):
         else:
             voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_RU-RU_IRINA_11.0"  # irina
         self.tts.setProperty('voice', voice_id) 
-
-        self._text = self._sp.get_my_text()
 
     def move(self, player, plot) -> None:
         if pygame.sprite.collide_mask(self, player):
