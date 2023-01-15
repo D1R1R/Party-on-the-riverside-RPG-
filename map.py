@@ -6,13 +6,16 @@ from mobs import Aggressive_Mob, Speaking_Mob
 
 
 class MapSupport():
-    def __init__(self, top, *group) -> None:
+    def __init__(self, wall, top, *group) -> None:
         sp = Support()
 
         self._top = top
+        self._wall = wall
         self._tile_group = group
         self._map_images = {
-            'wall': sp.load_image('', '', 'box.png'),
+            'bb': sp.load_image('tiles', 'down', 'block.png'),
+            'wall': sp.load_image('tiles', 'down', 'wall.png'),
+            'wall_': sp.load_image('tiles', 'down', 'wall_2.png'),
             'grass': sp.load_image('tiles', 'down', 'grass_1.png'),
             'flow': sp.load_image('tiles', 'down', 'flowers.png'),
             'empty': sp.load_image('tiles', 'down', 'grass_2.png'),
@@ -39,6 +42,8 @@ class MapSupport():
                 # DO NOT USE "+"
                 if level[y][x] == '.':
                     Tile(self._map_images, 'empty', x, y, self._tile_group)
+                elif level[y][x] == '%':
+                    Tile(self._map_images, 'bb', x, y, self._tile_group)
                 elif level[y][x] == '!':
                     Tile(self._map_images, 'grass', x, y, self._tile_group)
                 elif level[y][x] == '&':
@@ -46,7 +51,9 @@ class MapSupport():
                 elif level[y][x] == '@':
                     Tile(self._map_images, 'flow', x, y, self._tile_group)
                 elif level[y][x] == '#':
-                    Tile(self._map_images, 'wall', x, y, self._top)
+                    Tile(self._map_images, 'wall', x, y, self._top, self._wall)
+                elif level[y][x] == '=':
+                    Tile(self._map_images, 'wall_', x, y, self._top, self._wall)
                 elif level[y][x] == '/':
                     Tile(self._map_images, 'sea/', x, y, self._tile_group)
                 elif level[y][x] == '|':
@@ -63,14 +70,19 @@ class MapSupport():
                 # DO NOT USE "+"
                 if level[y][x] == '$':
                     Aggressive_Mob("monk", "idle_1.png", (x, y), self._top)
-                if level[y][x] == '@':
+                elif level[y][x] == '@':
                     Speaking_Mob('barmaid', "female", "idle_1.png", (x, y), self._top)
+                elif level[y][x] == '#':
+                    Aggressive_Mob("wind", "idle_1.png", (x, y), self._top)
+                elif level[y][x] == '*':
+                    Speaking_Mob('king', "female", "idle_1.png", (x, y), self._top)
 
 
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, map_images: dict, tile_type: str, pos_x: int, pos_y: int, *group):
         super().__init__(*group)
+        
         width = height = 64
         self.image = map_images[tile_type]
         self.rect = self.image.get_rect().move(
