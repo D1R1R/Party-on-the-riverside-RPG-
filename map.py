@@ -75,7 +75,7 @@ class MapSupport():
                 elif level[y][x] == '#':
                     Aggressive_Mob("wind", "idle_1.png", (x, y), self._top)
                 elif level[y][x] == '*':
-                    Speaking_Mob('king', "female", "idle_1.png", (x, y), self._top)
+                    Speaking_Mob('king', "male", "idle_1.png", (x, y), self._top)
 
 
 
