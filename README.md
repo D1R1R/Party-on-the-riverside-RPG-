@@ -16,12 +16,12 @@ python main.py
 - creating(or logging into) an account
 ### Dependencies
 - pygame;
-- pyttsx3;
-- random;
-- tkinter;
-- sqlite3;
-- sys;
-- os.
+  - pyttsx3;
+  - random;
+  - tkinter;
+  - sqlite3;
+  - sys;
+  - os.
 
 ## Interface
 __menu interface:__
