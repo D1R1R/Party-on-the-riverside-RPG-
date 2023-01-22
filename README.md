@@ -1,6 +1,6 @@
 # Party on the riverside(RPG game)
 *A single-player RPG game with a small plot.*
----
+____
 to start the game:
 ```
 python main.py
@@ -26,6 +26,6 @@ python main.py
 ## Interface
 __menu interface:__
 ![An image is missing?](Изображения/menu.jpeg "This is how it looks on your computer!")
----
+____
 __game interface:__
 ![An image is missing?](Изображения/game.jpeg "This is how it looks on your computer!")
