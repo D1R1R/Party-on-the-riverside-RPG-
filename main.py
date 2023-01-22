@@ -82,7 +82,7 @@ def main(size) -> None:
         font = pygame.font.SysFont('ArialBold', 35)
         text_surface = font.render(
             'press <p> to to pause; press <l> to exit',
-             False, (212, 175, 55))
+            False, (212, 175, 55))
         screen.blit(
             text_surface,
             (size[0] // 3, 0))
