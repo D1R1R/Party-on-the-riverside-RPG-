@@ -1,11 +1,14 @@
-import os, sys
-import pygame, pyttsx3
+import pygame
+import pyttsx3
 
-from support import Support, Plot
+from support import Support
 
 
 class Aggressive_Mob(pygame.sprite.Sprite):
-    def __init__(self, npc_name: str, file_name: str, pos: tuple, *group: any) -> None:
+    """
+    a mob that can attack
+    """
+    def __init__(self, npc_name: str, file_name: str, pos: tuple, *group: any) -> None:    # noqa: E501
         super().__init__(*group)
 
         self._sp = Support()
@@ -19,7 +22,8 @@ class Aggressive_Mob(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         # for animation
         self._status = "idle"
-        for animation_name in ["run", "runback", "idle", "take_hit", "atk", "death",]:
+        move_list = ["run", "runback", "idle", "take_hit", "atk", "death",]
+        for animation_name in move_list:
             self._sp.import_animation(path, animation_name)
         # specifications
         self._hp = 100
@@ -33,25 +37,25 @@ class Aggressive_Mob(pygame.sprite.Sprite):
             ((self.rect.x + self._width * 5) <= width and self.rect.x >= 0)
             and
             ((self.rect.y + self._height * 5) <= height and self.rect.y >= 0)
-            ):
+            ):    # noqa: E125
             if py != self.rect.y:
                 if py > self.rect.y:
                     if px > self.rect.x:
                         self._status = "run"
-                        self.rect.x, self.rect.y = (self.rect.x + 1), (self.rect.y + 1)
+                        self.rect.x, self.rect.y = (self.rect.x + 1), (self.rect.y + 1)  # noqa: E501
                     elif px < self.rect.x:
                         self._status = "runback"
-                        self.rect.x, self.rect.y = (self.rect.x - 1), (self.rect.y + 1)
+                        self.rect.x, self.rect.y = (self.rect.x - 1), (self.rect.y + 1)  # noqa: E501
                     else:
                         self._status = "run"
                         self.rect.y = self.rect.y + 1
                 if py < self.rect.y:
                     if px > self.rect.x:
                         self._status = "run"
-                        self.rect.x, self.rect.y = (self.rect.x + 1), (self.rect.y - 1)
+                        self.rect.x, self.rect.y = (self.rect.x + 1), (self.rect.y - 1)  # noqa: E501
                     elif px < self.rect.x:
                         self._status = "runback"
-                        self.rect.x, self.rect.y = (self.rect.x - 1), (self.rect.y - 1)
+                        self.rect.x, self.rect.y = (self.rect.x - 1), (self.rect.y - 1)  # noqa: E501
                     else:
                         self._status = "run"
                         self.rect.y -= 1
@@ -72,7 +76,7 @@ class Aggressive_Mob(pygame.sprite.Sprite):
                     else:
                         self._status = "idle"
         else:
-            self._status = "idle" 
+            self._status = "idle"
 
     def atk(self, atk_type: str, player) -> None:
         if player._status == "take_hit" or player._status == "death":
@@ -94,16 +98,18 @@ class Aggressive_Mob(pygame.sprite.Sprite):
         if player:
             if self._hp > 0 and self._status != "take_hit":
                 self.image, self._status = self._sp.choose_frame(self._status)
-                self.move(player) 
+                self.move(player)
             else:
                 self.image, self._status = self._sp.choose_frame(self._status)
                 if self._hp <= 0:
                     self._status = "death"
 
 
-
 class Speaking_Mob(pygame.sprite.Sprite):
-    def __init__(self, npc_name: str, gen: str, file_name: str, pos: tuple, *group: any) -> None:
+    """
+    a mob that can speak
+    """
+    def __init__(self, npc_name: str, gen: str, file_name: str, pos: tuple, *group: any) -> None:    # noqa: E501
         super().__init__(*group)
 
         self._sp = Support()
@@ -127,24 +133,27 @@ class Speaking_Mob(pygame.sprite.Sprite):
 
         self._gender = gen
         if self._gender == "male":
-            voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0"  # david
+            # david
+            self._voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0"  # noqa: W605, E501
         elif self._gender == "female":
-            voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"  # zira
+            # zira
+            self._voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"  # noqa: W605, E501
         else:
-            voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_RU-RU_IRINA_11.0"  # irina
-        self.tts.setProperty('voice', voice_id) 
+            # irina
+            self._voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_RU-RU_IRINA_11.0"  # noqa: W605, E501
 
     def move(self, player, plot) -> None:
         if pygame.sprite.collide_mask(self, player):
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_f]: 
+            if keys[pygame.K_f]:
                 text = plot.get_point(self._name)[0]
-                self.speach(text) 
+                self.speach(text)
                 self._active = False
         else:
             self._active = True
 
     def speach(self, text: str) -> None:
+        self.tts.setProperty('voice', self._voice_id)
         if self._active:
             self.tts.say(text)
             self.tts.runAndWait()
