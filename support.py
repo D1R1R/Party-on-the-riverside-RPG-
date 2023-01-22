@@ -87,6 +87,12 @@ class Support():
     def update_bd(self, screen, answ):
         db = sqlite3.connect("data.db")
         sql = db.cursor()
+        sql.execute("""CREATE TABLE IF NOT EXISTS "userpass" (
+            "username"  TEXT,
+            "password"  TEXT,
+            "act"  INTEGER,
+            "point"  INTEGER)""")
+        db.commit()
         name, password = answ
         if len(name) <= 3 or len(password) <= 3:
             self.caution(
