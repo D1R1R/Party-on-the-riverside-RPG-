@@ -45,7 +45,7 @@ class MapSupport():
                 if level[y][x] == '.':
                     Tile(self._map_images, 'empty', x, y, self._tile_group)
                 elif level[y][x] == '%':
-                    Tile(self._map_images, 'bb', x, y, self._tile_group)
+                    Tile(self._map_images, 'bb', x, y, self._top, self._wall)
                 elif level[y][x] == '!':
                     Tile(self._map_images, 'grass', x, y, self._tile_group)
                 elif level[y][x] == '&':
