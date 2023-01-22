@@ -25,7 +25,7 @@ python main.py
 
 ## Interface
 __menu interface:__
-![An image is missing?](Изображения/screen_reg_1.png "This is how it looks on your computer!")
+![An image is missing?](Изображения/screen_reg_1.PNG "This is how it looks on your computer!")
 ____
 __game interface:__
-![An image is missing?](Изображения/screen_game.png "This is how it looks on your computer!")
+![An image is missing?](Изображения/screen_game.PNG "This is how it looks on your computer!")
