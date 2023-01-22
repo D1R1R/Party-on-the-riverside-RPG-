@@ -4,8 +4,10 @@ from support import Support
 from mobs import Aggressive_Mob, Speaking_Mob
 
 
-
 class MapSupport():
+    """
+    draw and generate map
+    """
     def __init__(self, wall, top, *group) -> None:
         sp = Support()
 
@@ -31,9 +33,9 @@ class MapSupport():
         try:
             with open(path, 'r') as mapFile:
                 level_map = [line.strip() for line in mapFile]
-            return level_map 
-        except:
-            print(f"Файл с картой поврежден!")
+            return level_map
+        except:    # noqa: E722
+            print("Файл с картой поврежден!")
             sys.exit()
 
     def generate_level(self, level):
@@ -53,7 +55,10 @@ class MapSupport():
                 elif level[y][x] == '#':
                     Tile(self._map_images, 'wall', x, y, self._top, self._wall)
                 elif level[y][x] == '=':
-                    Tile(self._map_images, 'wall_', x, y, self._top, self._wall)
+                    Tile(
+                        self._map_images,
+                        'wall_', x, y, self._top,
+                        self._wall)
                 elif level[y][x] == '/':
                     Tile(self._map_images, 'sea/', x, y, self._tile_group)
                 elif level[y][x] == '|':
@@ -64,6 +69,7 @@ class MapSupport():
                     Tile(self._map_images, 'tree1', x, y, self._top)
                 elif level[y][x] == '2':
                     Tile(self._map_images, 'tree2', x, y, self._top)
+
     def generate_npc(self, level):
         for y in range(len(level)):
             for x in range(len(level[y])):
@@ -71,18 +77,26 @@ class MapSupport():
                 if level[y][x] == '$':
                     Aggressive_Mob("monk", "idle_1.png", (x, y), self._top)
                 elif level[y][x] == '@':
-                    Speaking_Mob('barmaid', "female", "idle_1.png", (x, y), self._top)
+                    Speaking_Mob(
+                        'barmaid', "female",
+                        "idle_1.png", (x, y),
+                        self._top)
                 elif level[y][x] == '#':
                     Aggressive_Mob("wind", "idle_1.png", (x, y), self._top)
                 elif level[y][x] == '*':
-                    Speaking_Mob('king', "male", "idle_1.png", (x, y), self._top)
-
+                    Speaking_Mob(
+                        'king', "male",
+                        "idle_1.png", (x, y),
+                        self._top)
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, map_images: dict, tile_type: str, pos_x: int, pos_y: int, *group):
+    """
+    Tilesets
+    """
+    def __init__(self, map_images: dict, tile_type: str, pos_x: int, pos_y: int, *group):  # noqa: E501
         super().__init__(*group)
-        
+
         width = height = 64
         self.image = map_images[tile_type]
         self.rect = self.image.get_rect().move(
