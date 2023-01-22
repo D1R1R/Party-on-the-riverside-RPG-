@@ -6,7 +6,7 @@ from map import MapSupport
 
 
 WINDOW_SIZE = (1300, 700)
-FPS = 70
+FPS = 65
 RED = (255, 0, 0)
 
 
@@ -18,7 +18,7 @@ def main(size) -> None:
     clock = pygame.time.Clock()
     width, height = size
 
-    pygame.display.set_caption("Прямоугольник")
+    pygame.display.set_caption("PartyOnTheRiverside")
     pygame.display.set_icon(pygame.image.load('icon.png'))
     screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
